@@ -20,6 +20,7 @@ class PositionalEncoding(nn.Module):
         super().__init__()
         self.d = d
         self.sequence_len = sequence_len
+        self.dropout = dropout
 
         pe = torch.zeros(sequence_len, d)
         
