@@ -64,3 +64,17 @@ class LayerNormalization(nn.Module):
         
         # eps is to prevent dividing by zero or when std is very small
         return self.alpha * (x - mean) / (std + self.eps) + self.bias
+    
+class FeedForwardBlock(nn.Module):
+
+    def __init__(self, d_model: int, d_ff: int, dropout: float) -> None:
+        
+        super().__init__()
+        self.linear_1 = nn.Linear(d_model, d_ff) # w1, b1
+        self.dropout = nn.Dropout(dropout)
+        self.linear_2 = nn.Linear(d_ff, d_model) # w2, b2
+
+    def forward(self, x):
+        
+        # (batch, sequence_len, d_model) --> (batch, sequence_len, d_ff) --> (batch, sequence_len, d_model)
+        return self.linear_2(self.dropout(torch.relu(self.linear_1(x))))
