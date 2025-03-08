@@ -82,6 +82,7 @@ class FeedForwardBlock(nn.Module):
 class MultiHeadAttentionBlock(nn.Module):
 
     def __init__(self, d: int, h: int, dropout: float) -> None:
+        
         super().__init__()
         self.d = d
         self.h = h
@@ -94,8 +95,27 @@ class MultiHeadAttentionBlock(nn.Module):
         self.w_o = nn.Linear(d, d, bias=False)
         
         self.dropout = nn.Dropout(dropout)
+        
+    @staticmethod
+    def attention(query, key, value, mask, dropout: nn.Dropout):
+    
+        d_k = query.shape[-1]
+        # Just apply the formula from the paper
+        # (batch, h, sequence_len, d_k) --> (batch, h, sequence_len, sequence_len)
+        attention_scores = (query @ key.transpose(-2, -1)) / math.sqrt(d_k)
+    
+        if mask is not None:
+            # Write a very low value (indicating -inf) to the positions where mask == 0
+            attention_scores.masked_fill_(mask == 0, -1e9)
+    
+        attention_scores = attention_scores.softmax(dim=-1) # (batch, h, sequence_len, sequence_len) # Apply softmax
+        if dropout is not None:
+            attention_scores = dropout(attention_scores)
+    
+        return (attention_scores @ value), attention_scores
 
     def forward(self, q, k, v, mask):
+       
         query = self.w_q(q) # (batch, sequence_len, d) --> (batch, sequence_len, d)
         key = self.w_k(k) # (batch, sequence_len, d) --> (batch, sequence_len, d)
         value = self.w_v(v) # (batch, sequence_len, d) --> (batch, sequence_len, d)
