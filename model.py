@@ -220,6 +220,7 @@ class ProjectionLayer(nn.Module):
         self.proj = nn.Linear(d_model, vocab_size)
 
     def forward(self, x) -> None:
-        
+
+        # (batch, seq_len, d_model) --> (batch, seq_len, vocab_size)
         return self.proj(x)
 
