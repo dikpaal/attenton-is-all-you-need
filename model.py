@@ -96,16 +96,22 @@ class MultiHeadAttentionBlock(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, q, k, v, mask):
-        query = self.w_q(q) 
-        key = self.w_k(k) 
-        value = self.w_v(v)
+        query = self.w_q(q) # (batch, sequence_len, d) --> (batch, sequence_len, d)
+        key = self.w_k(k) # (batch, sequence_len, d) --> (batch, sequence_len, d)
+        value = self.w_v(v) # (batch, sequence_len, d) --> (batch, sequence_len, d)
 
+        # (batch, sequence_len, d) --> (batch, sequence_len, h, d_k) --> (batch, h, sequence_len, d_k)
         query = query.view(query.shape[0], query.shape[1], self.h, self.d_k).transpose(1, 2)
         key = key.view(key.shape[0], key.shape[1], self.h, self.d_k).transpose(1, 2)
         value = value.view(value.shape[0], value.shape[1], self.h, self.d_k).transpose(1, 2)
 
+        # Calculate attention
         x, self.attention_scores = MultiHeadAttentionBlock.attention(query, key, value, mask, self.dropout)
         
+        # Combine all the heads together
+        # (batch, h, sequence_len, d_k) --> (batch, sequence_len, h, d_k) --> (batch, sequence_len, d)
         x = x.transpose(1, 2).contiguous().view(x.shape[0], -1, self.h * self.d_k)
 
+        # Multiply by Wo
+        # (batch, sequence_len, d) --> (batch, sequence_len, d)  
         return self.w_o(x)
