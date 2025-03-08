@@ -175,6 +175,6 @@ class Encoder(nn.Module):
 
     def forward(self, x, mask):
         
-        for layer in layers:
+        for layer in self.layers:
             x = layer(x, mask)
         return self.norm(x)
