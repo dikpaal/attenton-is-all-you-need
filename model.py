@@ -3,8 +3,7 @@ import torch
 import torch.nn as nn
 
 
-
-class InputEnbeddings(nn.Module):
+class InputEmbeddings(nn.Module):
 
     def __init__(self, d: int, vocab_size: int):
        
@@ -64,7 +63,7 @@ class LayerNormalization(nn.Module):
         
         # eps is to prevent dividing by zero or when std is very small
         return self.alpha * (x - mean) / (std + self.eps) + self.bias
-    
+
 class FeedForwardBlock(nn.Module):
 
     def __init__(self, d: int, d_ff: int, dropout: float) -> None:
@@ -148,7 +147,6 @@ class ResidualConnection(nn.Module):
 
             return x + self.dropout(sublayer(self.norm(x)))
 
-
 class EncoderBlock(nn.Module):
 
     def __init__(self, features: int, self_attention_block: MultiHeadAttentionBlock, feed_forward_block: FeedForwardBlock, dropout: float) -> None:
@@ -210,7 +208,6 @@ class Decoder(nn.Module):
             x = layer(x, encoder_output, src_mask, tgt_mask)
         return self.norm(x)
 
-
 class ProjectionLayer(nn.Module):
 
     def __init__(self, d, vocab_size) -> None:
@@ -222,7 +219,6 @@ class ProjectionLayer(nn.Module):
 
         # (batch, sequence_len, d) --> (batch, sequence_len, vocab_size)
         return self.proj(x)
-
 
 class Transformer(nn.Module):
 
@@ -255,7 +251,6 @@ class Transformer(nn.Module):
         
         # (batch, sequence_len, vocab_size)
         return self.projection_layer(x)
-
 
 def build_transformer(src_vocab_size: int, tgt_vocab_size: int, src_sequence_len: int, tgt_sequence_len: int, d: int = 512, N: int = 6, h: int = 8, dropout: float = 0.1, d_ff: int = 2048) -> Transformer:
     
