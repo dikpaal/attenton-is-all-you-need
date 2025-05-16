@@ -81,13 +81,14 @@ class Decoder(nn.Module):
         
         return self.norm(x)
 
-class ProjectionLayer(nn.Module):
+class ProjLayer(nn.Module):
 
     def __init__(self, d_model, vocab_size) -> None:
         
         super().__init__()
         self.proj = nn.Linear(d_model, vocab_size)
 
+    # FROM (batch, len_of sequence, d_model) TO (batch, len_of_sequence, vocab_size)
     def forward(self, x) -> None:
         return self.proj(x)
     
@@ -195,11 +196,19 @@ class NormLayer(nn.Module):
         
         super().__init__()
         self.eps = eps
+        
+        # APLHA
         self.alpha = nn.Parameter(torch.ones(features))
+        
+        # BIAS
         self.bias = nn.Parameter(torch.zeros(features))
 
     def forward(self, x):
         
+        
+        # x: (batch, len_of_sequence, hidden_size)
+        
+
         mean = x.mean(dim = -1, keepdim = True)
         std = x.std(dim = -1, keepdim = True)
         
@@ -207,7 +216,7 @@ class NormLayer(nn.Module):
 
 class Transformer(nn.Module):
 
-    def __init__(self, encoder: Encoder, decoder: Decoder, srcembed: InputEmbeddings, tgtembed: InputEmbeddings, src_pos: PositionalEncoding, tgtpos: PositionalEncoding, projection_layer: ProjectionLayer) -> None:
+    def __init__(self, encoder: Encoder, decoder: Decoder, srcembed: InputEmbeddings, tgtembed: InputEmbeddings, src_pos: PositionalEncoding, tgtpos: PositionalEncoding, projection_layer: ProjLayer) -> None:
         
         super().__init__()
         self.encoder = encoder
@@ -218,20 +227,24 @@ class Transformer(nn.Module):
         self.tgtpos = tgtpos
         self.projection_layer = projection_layer
 
+
+    # DIMENSION: (batch, len_of_sequence, d_model)
     def encode(self, src, srcmask):
-        # (batch, len_of_sequence, d_model)
+    
         src = self.srcembed(src)
         src = self.src_pos(src)
         return self.encoder(src, srcmask)
     
+    # DIMESNION (batch, len_of_sequence, d_model)
     def decode(self, encoder_output: torch.Tensor, srcmask: torch.Tensor, tgt: torch.Tensor, tgtmask: torch.Tensor):
-        # (batch, len_of_sequence, d_model)
+    
         tgt = self.tgtembed(tgt)
         tgt = self.tgtpos(tgt)
         return self.decoder(tgt, encoder_output, srcmask, tgtmask)
     
+    # DIMENSION: (batch, len_of_sequence, vocab_size)
     def project(self, x):
-        # (batch, len_of_sequence, vocab_size)
+        
         return self.projection_layer(x)
     
     
@@ -239,6 +252,16 @@ class Transformer(nn.Module):
 
 def init_transformer(src_vocab_size: int, tgt_vocab_size: int, src_len_of_sequence: int, tgt_len_of_sequence: int, d_model: int=512, N: int=6, h: int=8, dropout: float=0.1, d_ff: int=2048) -> Transformer:
     
+    # EMBEDDING LAYERS: DONE
+    # POSITIONAL ENCODING LATERS: DONE
+    # ENCODER BLOCKS: DONE
+    # DECODER BLOCKS: DONE
+    # ENCODER: DONE
+    # DECODER: DONE
+    # PROJECTION LAYER: DONE
+    # INIT TRANSFORMER
+    # INIT PARAMS
+
     srcembed = InputEmbeddings(d_model, src_vocab_size)
     tgtembed = InputEmbeddings(d_model, tgt_vocab_size)
     src_pos = PositionalEncoding(d_model, src_len_of_sequence, dropout)
@@ -264,7 +287,7 @@ def init_transformer(src_vocab_size: int, tgt_vocab_size: int, src_len_of_sequen
     
     encoder = Encoder(d_model, nn.ModuleList(encoder_blocks))
     decoder = Decoder(d_model, nn.ModuleList(decoder_blocks))
-    projection_layer = ProjectionLayer(d_model, tgt_vocab_size)
+    projection_layer = ProjLayer(d_model, tgt_vocab_size)
     transformer = Transformer(encoder, decoder, srcembed, tgtembed, src_pos, tgtpos, projection_layer)
 
     for p in transformer.parameters():
