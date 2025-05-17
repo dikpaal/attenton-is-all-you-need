@@ -122,7 +122,7 @@ This decreasing trend in cross-entropy loss demonstrates that the model is succe
 
 ## 📉 Understanding the Loss
 
-We use `nn.CrossEntropyLoss`, which is standard for classification tasks. In the context of language modeling and sequence prediction:
+I have used `nn.CrossEntropyLoss`, which is standard for classification tasks. In the context of language modeling and sequence prediction:
 
 - The model outputs a tensor of shape `(batch_size, seq_len, vocab_size)` — representing logits over vocabulary.
 - The true targets are token indices of shape `(batch_size, seq_len)`.
