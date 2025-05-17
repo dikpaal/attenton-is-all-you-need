@@ -17,6 +17,12 @@ In this repo, I have coded a PyTorch implementation of the Transformer architect
 
 ---
 
+## 📝 Architecture
+
+![Transformer Architecture](images/transformer-architecture.webp)
+
+---
+
 ## 📖 Background
 
 > “Attention is all you need” introduced a novel, fully attention-based architecture that eliminated recurrence entirely in sequence transduction tasks.
