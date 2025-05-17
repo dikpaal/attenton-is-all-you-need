@@ -45,6 +45,7 @@ Key ideas:
 
 ```bash
 transformer_project/
+├── checkpoints/
 ├── data/
 │   └── dataset.py              # Copy task dataset
 ├── model/
