@@ -66,6 +66,8 @@ transformer_project/
 
 ## 🚀 How to Run
 
+### ✅ 0. Create a folder called ```checkpoints``` in the root directory. This is where the weights will be saved. 
+
 ### ✅ 1. Set up environment
 
 ```bash
