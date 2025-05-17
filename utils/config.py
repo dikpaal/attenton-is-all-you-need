@@ -1,7 +1,7 @@
 import torch
 class Config:
     VOCAB_SIZE = 10
-    SEQ_LEN = 7
+    len_of_sequence = 7
     BATCH_SIZE = 32
     EPOCHS = 20
     DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'

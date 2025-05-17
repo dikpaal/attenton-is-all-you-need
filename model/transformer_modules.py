@@ -123,7 +123,7 @@ class PosEncoding(nn.Module):
 
     def forward(self, x):
         
-        # DIMENSION IS (batch, seq_len, d_model)
+        # DIMENSION IS (batch, len_of_sequence, d_model)
         x += (self.pe[:, :x.shape[1], :]).requires_grad_(False)
         return self.dropout(x)
 

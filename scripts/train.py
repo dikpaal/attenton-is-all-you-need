@@ -17,7 +17,7 @@ def train(model):
     model.to(Config.DEVICE)
     loss_fn = nn.CrossEntropyLoss(ignore_index=0)
     optimizer = optim.Adam(model.parameters(), lr=Config.LR)
-    dataloader = DataLoader(CopyDataset(Config.VOCAB_SIZE, Config.SEQ_LEN), batch_size=Config.BATCH_SIZE, shuffle=True)
+    dataloader = DataLoader(CopyDataset(Config.VOCAB_SIZE, Config.len_of_sequence), batch_size=Config.BATCH_SIZE, shuffle=True)
 
     for epoch in range(Config.EPOCHS):
         model.train()
@@ -40,8 +40,8 @@ if __name__ == "__main__":
     model = init_transformer(
         src_vocab_size=Config.VOCAB_SIZE,
         tgt_vocab_size=Config.VOCAB_SIZE,
-        src_len_of_sequence=Config.SEQ_LEN,
-        tgt_len_of_sequence=Config.SEQ_LEN
+        src_len_of_sequence=Config.len_of_sequence,
+        tgt_len_of_sequence=Config.len_of_sequence
     )
     train(model)
     

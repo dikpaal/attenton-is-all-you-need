@@ -7,11 +7,11 @@ import random
 
 # Dummy dataset where input == target
 class CopyDataset(Dataset):
-    def __init__(self, vocab_size=10, seq_len=7, num_samples=1000):
+    def __init__(self, vocab_size=10, len_of_sequence=7, num_samples=1000):
         self.vocab_size = vocab_size
-        self.seq_len = seq_len
+        self.len_of_sequence = len_of_sequence
         self.samples = [
-            torch.randint(1, vocab_size, (seq_len,))
+            torch.randint(1, vocab_size, (len_of_sequence,))
             for _ in range(num_samples)
         ]
 

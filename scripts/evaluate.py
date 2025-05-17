@@ -10,8 +10,8 @@ from utils.config import Config
 model = init_transformer(
     src_vocab_size=Config.VOCAB_SIZE,
     tgt_vocab_size=Config.VOCAB_SIZE,
-    src_len_of_sequence=Config.SEQ_LEN,
-    tgt_len_of_sequence=Config.SEQ_LEN
+    src_len_of_sequence=Config.len_of_sequence,
+    tgt_len_of_sequence=Config.len_of_sequence
 )
 
 model.load_state_dict(torch.load("checkpoints/transformer.pt"))
@@ -25,7 +25,7 @@ src_mask, _ = create_mask(src_sequence, src_sequence)
 generated = torch.tensor([[1]], dtype=torch.long).to(Config.DEVICE)
 
 # Generate tokens one by one
-for _ in range(Config.SEQ_LEN - 1):
+for _ in range(Config.len_of_sequence - 1):
     _, tgt_mask = create_mask(src_sequence, generated)
     enc_out = model.encode(src_sequence, src_mask)
     dec_out = model.decode(enc_out, src_mask, generated, tgt_mask)
