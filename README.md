@@ -1,6 +1,6 @@
 # 🧠 Attention Is All You Need — Transformer from Scratch
 
-A full PyTorch implementation of the Transformer architecture proposed in the [Attention Is All You Need](https://arxiv.org/abs/1706.03762) paper by Vaswani et al., built **entirely from scratch** — no `nn.Transformer` used. This repo walks through **core components** like Multi-Head Attention, Positional Encoding, Residual Connections, and builds a full encoder-decoder architecture.
+A full PyTorch implementation of the Transformer architecture proposed in the [Attention Is All You Need](https://arxiv.org/abs/1706.03762) paper by Vaswani et al., built **entirely from scratch** — no `nn.Transformer` used. I have manually written the logic of all the **core components** like Multi-Head Attention, Positional Encoding, Residual Connections, and have built a full encoder-decoder architecture, as shown in the paper.
 
 ---
 
