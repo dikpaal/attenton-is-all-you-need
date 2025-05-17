@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
@@ -43,3 +44,5 @@ if __name__ == "__main__":
         tgt_len_of_sequence=Config.SEQ_LEN
     )
     train(model)
+    
+torch.save(model.state_dict(), "checkpoints/transformer.pt")

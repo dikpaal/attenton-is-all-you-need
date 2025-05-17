@@ -11,6 +11,7 @@ A full PyTorch implementation of the Transformer architecture proposed in the [A
 - [📂 Project Structure](#-project-structure)
 - [🚀 How to Run](#-how-to-run)
 - [📈 Training Phase](#-training-phase)
+- [📉 Understanding the Loss](#-understanding-the-loss)
 - [📊 Results](#-results)
 - [📚 References](#-references)
 
@@ -56,7 +57,7 @@ transformer_project/
 │   └── masks.py                # Attention masks
 ├── scripts/
 │   ├── train.py                # Run training
-│   └── evaluate.py             # (Coming soon) Test predictions
+│   └── evaluate.py             # Evaluate predictions
 └── README.md
 ```
 
@@ -78,7 +79,11 @@ pip install torch numpy
 python scripts/train.py
 ```
 
-### ✅ 3. Evaluate on custom inputs *(after `evaluate.py` is added)*
+### ✅ 3. Evaluate on custom inputs
+
+```bash
+python scripts/evaluate.py
+```
 
 ---
 
@@ -86,49 +91,72 @@ python scripts/train.py
 
 The model is trained on a simple **CopyDataset** — a synthetic task where the target is to exactly match the input sequence. This is a standard sanity check for sequence-to-sequence models.
 
-The loss over 10 epochs is shown below:
+The loss over 20 epochs is shown below:
 
 ```
-Epoch 1: Loss = 65.6407
-Epoch 2: Loss = 45.7510
-Epoch 3: Loss = 41.2413
-Epoch 4: Loss = 38.0328
-Epoch 5: Loss = 35.7573
-Epoch 6: Loss = 31.8876
-Epoch 7: Loss = 24.8849
-Epoch 8: Loss = 18.8855
-Epoch 9: Loss = 14.8475
-Epoch 10: Loss = 11.7760
+Epoch 1: Loss = 64.9550
+Epoch 2: Loss = 45.3683
+Epoch 3: Loss = 41.6539
+Epoch 4: Loss = 38.7634
+Epoch 5: Loss = 35.9337
+Epoch 6: Loss = 32.8420
+Epoch 7: Loss = 25.4253
+Epoch 8: Loss = 21.1785
+Epoch 9: Loss = 16.2617
+Epoch 10: Loss = 13.5020
+Epoch 11: Loss = 9.5204
+Epoch 12: Loss = 8.3192
+Epoch 13: Loss = 6.6703
+Epoch 14: Loss = 7.0311
+Epoch 15: Loss = 5.4314
+Epoch 16: Loss = 4.2892
+Epoch 17: Loss = 4.4969
+Epoch 18: Loss = 3.4575
+Epoch 19: Loss = 2.8775
+Epoch 20: Loss = 2.1741
 ```
 
-This decreasing trend in cross-entropy loss demonstrates that the model is successfully learning the identity function, i.e., copying the input sequence to the output.
+This decreasing trend in cross-entropy loss demonstrates that the model is successfully learning the identity function — copying the input sequence to the output.
+
+---
+
+## 📉 Understanding the Loss
+
+We use `nn.CrossEntropyLoss`, which is standard for classification tasks. In the context of language modeling and sequence prediction:
+
+- The model outputs a tensor of shape `(batch_size, seq_len, vocab_size)` — representing logits over vocabulary.
+- The true targets are token indices of shape `(batch_size, seq_len)`.
+- The loss is computed **per token**, and then averaged.
+
+In theory, if your vocabulary has 10 tokens, the worst-case (uniform guessing) per-token loss is:
+
+```text
+CE_loss = -log(1 / 10) ≈ 2.302
+```
+
+So a perfect model copying a 7-token sequence would ideally get:
+
+```text
+2.302 × 7 = ~16.1 total loss per sample
+```
+
+With enough epochs, the Transformer converges well below this. A decreasing loss confirms the model is learning meaningful mappings from source to target tokens.
 
 ---
 
 ## 📊 Results
 
-Sample loss curve on CopyDataset (vocab size = 10, seq len = 7):
+**Evaluation Input → Output:**
 
-| Epoch | Loss     |
-|-------|----------|
-| 1     | 65.64    |
-| 5     | 35.75    |
-| 10    | 11.77    |
+```python
+Input sequence:      [1, 2, 3, 4, 5, 6, 7]
+Generated sequence:  [1, 2, 3, 4, 5, 6, 7]
+```
 
-👉 Model is able to reliably learn the identity function (copying inputs).
+✅ This proves the model has learned the copy task.
 
 ---
 
 ## 📚 References
 
 - [Attention is All You Need (Vaswani et al., 2017)](https://arxiv.org/abs/1706.03762)
-- [Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/)
-- [The Annotated Transformer (Harvard NLP)](http://nlp.seas.harvard.edu/2018/04/03/attention.html)
-
----
-
-> 🚧 Future Plans:
-> - [ ] Add evaluate script for visualizing outputs
-> - [ ] Add support for real translation tasks
-> - [ ] Add architecture diagrams
-> - [ ] Upload training logs or TensorBoard graphs
