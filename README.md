@@ -19,7 +19,7 @@ In this repo, I have coded a PyTorch implementation of the Transformer architect
 
 ## 📝 Architecture
 
-![Transformer Architecture](images/transformer-architecture.png)
+![Transformer Architecture](images/architecture.png)
 
 ---
 
