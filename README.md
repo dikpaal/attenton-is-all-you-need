@@ -1,4 +1,4 @@
-# 🧠 Attention Is All You Need — Transformer from Scratch
+# 🧠 Transformer from Scratch - Attention Is All You Need Paper Implementation
 
 In this repo, I have coded a PyTorch implementation of the Transformer architecture proposed in the [Attention Is All You Need](https://arxiv.org/abs/1706.03762) paper by Vaswani et al., **entirely from scratch** — no `nn.Transformer` used, and have trained it and performed inference. I have manually written the logic of all the **core components** like Multi-Head Attention, Positional Encoding, Residual Connections, and have built the full encoder-decoder architecture, introduced in the paper.
 
@@ -46,7 +46,6 @@ Key ideas:
 ```bash
 transformer_project/
 │ 
-├── checkpoints/                # Save the weights here
 ├── data/
 │   └── dataset.py              # Copy task dataset
 ├── model/
