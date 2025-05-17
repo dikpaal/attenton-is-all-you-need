@@ -6,6 +6,7 @@ In this repo, I have coded a PyTorch implementation of the Transformer architect
 
 ## 📌 Table of Contents
 
+- [📝 Architecture](#-architecture)
 - [📖 Background](#-background)
 - [🛠 Features](#-features)
 - [📂 Project Structure](#-project-structure)
