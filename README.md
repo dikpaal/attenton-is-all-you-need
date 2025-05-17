@@ -160,3 +160,5 @@ Generated sequence:  [1, 2, 3, 4, 5, 6, 7]
 ## 📚 References
 
 - [Attention is All You Need (Vaswani et al., 2017)](https://arxiv.org/abs/1706.03762)
+- [Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/)
+- [The Annotated Transformer (Harvard NLP)](http://nlp.seas.harvard.edu/2018/04/03/attention.html)
